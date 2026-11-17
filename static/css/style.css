@@ -1,0 +1,784 @@
+/* ========================================
+   GLOBAL STYLES
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #1e293b;
+    padding: 25px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: #172554;
+}
+
+.header p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.section {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* ========================================
+   DASHBOARD HEADER
+======================================== */
+
+.dashboard-header {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.dashboard-header h1 {
+    color: #172f55;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+
+.dashboard-header p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* ========================================
+   SCAN BUTTON SECTION
+======================================== */
+
+.scan-launch-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.scan-launch-section form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.scan-button {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.scan-button:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+.main-scan-button {
+    min-width: 180px;
+    padding: 14px 28px;
+    font-size: 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.main-scan-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.main-scan-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Scanning indicator */
+
+.scan-status {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    color: #2563eb;
+    font-size: 13px;
+}
+
+.scan-status.active {
+    display: inline-flex;
+}
+
+.scan-spinner {
+    width: 17px;
+    height: 17px;
+    border: 2px solid #bfdbfe;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: scan-spin 0.8s linear infinite;
+}
+
+@keyframes scan-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   NETWORK INFORMATION
+======================================== */
+
+.network-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.network-item {
+    min-width: 0;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.network-item span {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.network-item strong {
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+/* Blocking information */
+
+.blocking-information p {
+    margin: 8px 0;
+}
+
+/* ========================================
+   SUMMARY CARDS
+======================================== */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card span {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.summary-card strong {
+    font-size: 28px;
+}
+
+/* ========================================
+   TABLES
+======================================== */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+th,
+td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 13px;
+}
+
+th {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+/* ========================================
+   RISK BADGES
+======================================== */
+
+.risk,
+.risk-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.risk-low {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.risk-medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.risk-high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ========================================
+   MESSAGES
+======================================== */
+
+.notice {
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 16px;
+    line-height: 1.6;
+}
+
+.error {
+    color: #b91c1c;
+    background: #fee2e2;
+    padding: 12px;
+    border-radius: 7px;
+    margin-top: 15px;
+}
+
+/* ========================================
+   SCAN HISTORY PAGE
+======================================== */
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.history-header h2 {
+    margin: 0;
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.history-actions form {
+    margin: 0;
+}
+
+.history-button,
+.back-dashboard-button,
+.delete-history-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.history-button,
+.back-dashboard-button {
+    background: #2563eb;
+    color: #ffffff;
+    border: 1px solid #2563eb;
+}
+
+.history-button:hover,
+.back-dashboard-button:hover {
+    background: #1d4ed8;
+    color: #ffffff;
+}
+
+.delete-history-button {
+    background: #dc2626;
+    color: #ffffff;
+    border: 1px solid #dc2626;
+}
+
+.delete-history-button:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+.delete-history-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.success-message {
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.empty-history-message {
+    color: #64748b;
+    font-size: 14px;
+    margin: 16px 0 4px;
+}
+
+/* ========================================
+   SCAN DETAILS PAGE
+======================================== */
+
+.details-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+
+.details-section-header h2 {
+    margin: 0;
+}
+
+.details-navigation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    background: #f1f5f9;
+    color: #334155;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.secondary-button:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.scan-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.scan-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    min-width: 0;
+}
+
+.info-label {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.info-value {
+    color: #1e293b;
+    font-size: 15px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.section-heading {
+    margin-bottom: 20px;
+}
+
+.section-heading h2 {
+    margin-bottom: 6px;
+}
+
+.section-heading p {
+    color: #64748b;
+    font-size: 14px;
+    margin: 0;
+}
+
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+}
+
+.details-table th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 600;
+    padding: 14px;
+    white-space: nowrap;
+}
+
+.details-table td {
+    padding: 14px;
+    color: #334155;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: middle;
+}
+
+.details-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 35px 20px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+}
+
+.empty-state h3 {
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #64748b;
+    font-size: 14px;
+    margin: 0;
+}
+
+.table-note {
+    margin-top: 16px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+/* View Device Button */
+
+.view-details-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 13px;
+    background: #eff6ff;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #bfdbfe;
+    border-radius: 5px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.view-details-button:hover {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+/* ========================================
+   DEVICE DETAILS PAGE
+======================================== */
+
+.device-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.device-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    min-width: 0;
+}
+
+.device-analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.device-analysis-grid .section {
+    margin-bottom: 0;
+}
+
+.device-analysis-grid .section:last-child {
+    grid-column: 1 / -1;
+}
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.detail-value {
+    color: #1e293b;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.detail-subsection {
+    margin-top: 20px;
+}
+
+.detail-subsection h3 {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #334155;
+}
+
+.detail-list {
+    padding-left: 20px;
+    margin: 0;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.detail-list li {
+    padding-left: 4px;
+    margin-bottom: 5px;
+}
+
+/* ========================================
+   DASHBOARD HISTORY BUTTON
+======================================== */
+
+.dashboard-history {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+    margin-bottom: 15px;
+}
+
+.history-button:focus-visible,
+.main-scan-button:focus-visible,
+.back-dashboard-button:focus-visible,
+.delete-history-button:focus-visible,
+.view-details-button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 1000px) {
+
+    .network-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .scan-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 23px;
+    }
+
+    .section {
+        padding: 18px;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .history-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .history-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .container {
+        padding: 10px 0;
+    }
+
+    .dashboard-header {
+        margin-top: 15px;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-header p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .scan-launch-section {
+        padding: 15px 5px;
+    }
+
+    .main-scan-button {
+        width: 100%;
+        max-width: 240px;
+    }
+
+    .network-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .device-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .device-analysis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .device-analysis-grid .section:last-child {
+        grid-column: auto;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .detail-value {
+        text-align: left;
+    }
+
+    .details-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .details-navigation {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .network-grid,
+    .device-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .history-actions form,
+    .history-actions button,
+    .history-actions a {
+        width: 100%;
+    }
+}

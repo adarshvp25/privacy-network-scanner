@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Network Security Assessment</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Project Header -->
+        <header class="header dashboard-header">
+            <h1>Network Security Assessment</h1>
+            <p>Local Network Device Discovery and Security Assessment System</p>
+        </header>
+
+        <!-- Central Scan Button -->
+        <section class="scan-launch-section">
+
+            <form method="POST" id="scanForm">
+
+                <button type="submit" class="scan-button main-scan-button" id="scanButton">
+
+                    <span id="scanButtonText">Scan Network</span>
+
+                </button>
+
+                <div class="scan-status" id="scanStatus" role="status" aria-live="polite">
+
+                    <span class="scan-spinner"></span>
+                    Scanning your network. Please wait...
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- Scan Error -->
+        {% if scan_error %}
+
+        <section class="section">
+            <p class="error">
+                Scan Error: {{ scan_error }}
+            </p>
+        </section>
+
+        {% endif %}
+
+        <!-- Display Results After Scanning -->
+        {% if scan_performed %}
+
+        <!-- 1. Network Information -->
+        {% if network and not network.error %}
+
+        <section class="section">
+
+            <h2>Network Information</h2>
+
+            <div class="network-grid">
+
+                <div class="network-item">
+                    <span>Connected Wi-Fi</span>
+                    <strong>{{ network.ssid or "Unavailable" }}</strong>
+                </div>
+
+                <div class="network-item">
+                    <span>Local IP Address</span>
+                    <strong>{{ network.local_ip }}</strong>
+                </div>
+
+                <div class="network-item">
+                    <span>Subnet Mask</span>
+                    <strong>{{ network.subnet_mask }}</strong>
+                </div>
+
+                <div class="network-item">
+                    <span>Network Range</span>
+                    <strong>{{ network.network }}</strong>
+                </div>
+
+                <div class="network-item">
+                    <span>Default Gateway</span>
+                    <strong>{{ network.gateway or "Not detected" }}</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+        <!-- 2. Device Blocking Status -->
+        {% if blocking %}
+
+        <section class="section">
+
+            <h2>Device Blocking Status</h2>
+
+            <div class="blocking-information">
+
+                <p>
+                    <strong>Connected Network:</strong>
+                    {{ blocking.network_name or network.ssid or "Unavailable" }}
+                </p>
+
+                <p>
+                    <strong>Default Gateway:</strong>
+                    {{ blocking.gateway or network.gateway or "Not detected" }}
+                </p>
+
+            </div>
+
+            <p class="notice">
+                {{ blocking.message }}
+            </p>
+
+            {% if not blocking.supported %}
+            <p class="error">
+                Selective device blocking is currently unavailable.
+            </p>
+            {% endif %}
+
+        </section>
+
+        {% endif %}
+
+        <!-- 3. Summary and Scan Results -->
+        {% if not scan_error %}
+
+        <section class="summary-grid">
+
+            <div class="summary-card">
+                <span>Total Devices</span>
+                <strong>{{ total_devices }}</strong>
+            </div>
+
+            <div class="summary-card">
+                <span>High Risk</span>
+                <strong>{{ high_risk }}</strong>
+            </div>
+
+            <div class="summary-card">
+                <span>Medium Risk</span>
+                <strong>{{ medium_risk }}</strong>
+            </div>
+
+            <div class="summary-card">
+                <span>Low Risk</span>
+                <strong>{{ low_risk }}</strong>
+            </div>
+
+        </section>
+
+        <!-- 4. Scan Results -->
+        <section class="section">
+
+            <h2>Scan Results</h2>
+
+            {% if devices %}
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>MAC Address</th>
+                            <th>Manufacturer</th>
+                            <th>Hostname</th>
+                            <th>Device Type</th>
+                            <th>Open Ports</th>
+                            <th>Risk Score</th>
+                            <th>Risk Level</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for device in devices %}
+
+                        <tr>
+                            <td>{{ device.ip }}</td>
+                            <td>{{ device.mac }}</td>
+                            <td>{{ device.vendor }}</td>
+                            <td>{{ device.hostname }}</td>
+                            <td>{{ device.device_type }}</td>
+
+                            <td>
+                                {{ device.open_ports | join(', ')
+                                if device.open_ports else 'None detected' }}
+                            </td>
+
+                            <td>{{ device.risk_score }}</td>
+
+                            <td>
+                                <span class="risk risk-{{ device.risk_level | lower }}">
+                                    {{ device.risk_level }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p>No devices found on this network.</p>
+
+            {% endif %}
+
+            <p class="notice">
+                Device classifications and risk levels are preliminary
+                assessments based on observed network evidence.
+            </p>
+
+        </section>
+
+        {% endif %}
+
+        {% endif %}
+
+        <!-- Scan History -->
+        <div class="dashboard-history">
+
+            <a href="{{ url_for('history') }}" class="history-button">
+                View Scan History
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Scan Button Behaviour -->
+    <script>
+
+        const scanForm = document.getElementById("scanForm");
+        const scanButton = document.getElementById("scanButton");
+        const scanButtonText = document.getElementById("scanButtonText");
+        const scanStatus = document.getElementById("scanStatus");
+
+        scanForm.addEventListener("submit", function () {
+
+            scanButton.disabled = true;
+            scanButtonText.textContent = "Scanning...";
+            scanStatus.classList.add("active");
+
+        });
+
+    </script>
+
+</body>
+
+</html>

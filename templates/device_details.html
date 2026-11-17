@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Device Details</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Page Header -->
+        <header class="header">
+            <h1>Device Details</h1>
+            <p>Network device information and security assessment</p>
+        </header>
+
+
+        <!-- Device Overview -->
+        <section class="section">
+
+            <div class="details-section-header">
+                <h2>Network Information</h2>
+
+                <div class="details-navigation">
+
+                    <a href="{{ url_for('scan_details', scan_id=device.scan_id) }}" class="secondary-button">
+                        ← Scan Details
+                    </a>
+
+                    <a href="{{ url_for('history') }}" class="secondary-button">
+                        Scan History
+                    </a>
+
+                    <a href="{{ url_for('dashboard') }}" class="back-dashboard-button">
+                        Dashboard
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="device-info-grid">
+
+                <div class="device-info-item">
+                    <span class="info-label">IP Address</span>
+                    <span class="info-value">{{ device.ip_address }}</span>
+                </div>
+
+                <div class="device-info-item">
+                    <span class="info-label">MAC Address</span>
+                    <span class="info-value">{{ device.mac_address }}</span>
+                </div>
+
+                <div class="device-info-item">
+                    <span class="info-label">Manufacturer</span>
+                    <span class="info-value">{{ device.manufacturer or "Unknown" }}</span>
+                </div>
+
+                <div class="device-info-item">
+                    <span class="info-label">Hostname</span>
+                    <span class="info-value">{{ device.hostname or "Unknown" }}</span>
+                </div>
+
+                <div class="device-info-item">
+                    <span class="info-label">Network Range</span>
+                    <span class="info-value">{{ device.network_range }}</span>
+                </div>
+
+                <div class="device-info-item">
+                    <span class="info-label">Scan Date</span>
+                    <span class="info-value">{{ device.scan_time }}</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Device Analysis -->
+        <div class="device-analysis-grid">
+
+            <!-- Device Identification -->
+            <section class="section">
+
+                <h2>Device Identification</h2>
+
+                <div class="detail-row">
+                    <span class="detail-label">Device Type</span>
+
+                    <span class="detail-value">
+                        {{ device.device_type }}
+                    </span>
+                </div>
+
+                {% if device.confidence %}
+
+                <div class="detail-row">
+                    <span class="detail-label">Identification Confidence</span>
+
+                    <span class="detail-value">
+                        {{ device.confidence }}
+                    </span>
+                </div>
+
+                {% endif %}
+
+                {% if device.indicators %}
+
+                <div class="detail-subsection">
+                    <h3>Identification Indicators</h3>
+
+                    <ul class="detail-list">
+                        {% for indicator in device.indicators.split('; ') %}
+                        <li>{{ indicator }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- Network Services -->
+            <section class="section">
+
+                <h2>Network Services</h2>
+
+                <div class="detail-row">
+                    <span class="detail-label">Open Ports</span>
+
+                    <span class="detail-value">
+                        {% if device.open_ports %}
+                        {{ device.open_ports }}
+                        {% else %}
+                        None detected
+                        {% endif %}
+                    </span>
+                </div>
+
+            </section>
+
+
+            <!-- Security Assessment -->
+            <section class="section">
+
+                <h2>Security Assessment</h2>
+
+                <div class="detail-row">
+                    <span class="detail-label">Risk Score</span>
+
+                    <span class="detail-value">
+                        {{ device.risk_score or 0 }}
+                    </span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Risk Level</span>
+
+                    <span class="risk-badge risk-{{ (device.risk_level or 'low')|lower }}">
+                        {{ device.risk_level or "Low" }}
+                    </span>
+                </div>
+
+                {% if device.security_findings %}
+
+                <div class="detail-subsection">
+                    <h3>Security Findings</h3>
+
+                    <ul class="detail-list">
+                        {% for finding in device.security_findings.split('; ') %}
+                        <li>{{ finding }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% endif %}
+
+                {% if device.recommendations %}
+
+                <div class="detail-subsection">
+                    <h3>Recommendations</h3>
+
+                    <ul class="detail-list">
+                        {% for recommendation in device.recommendations.split('; ') %}
+                        <li>{{ recommendation }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% endif %}
+
+            </section>
+
+        </div>
+
+        <p class="table-note">
+            Device identification and security assessments are based on
+            observable network information. They do not guarantee that a
+            device is secure or vulnerable.
+        </p>
+
+    </div>
+
+</body>
+
+</html>

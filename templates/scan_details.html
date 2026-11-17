@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scan Details</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Page Header -->
+        <header class="header">
+            <h1>Scan Details</h1>
+            <p>Detailed network scan results and discovered devices</p>
+        </header>
+
+
+        <!-- Scan Information -->
+        <section class="section">
+
+            <div class="details-section-header">
+                <h2>Scan Information</h2>
+
+                <div class="details-navigation">
+                    <a href="{{ url_for('history') }}" class="secondary-button">
+                        ← Scan History
+                    </a>
+
+                    <a href="{{ url_for('dashboard') }}" class="back-dashboard-button">
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <div class="scan-info-grid">
+
+                <div class="scan-info-item">
+                    <span class="info-label">Scan ID</span>
+                    <span class="info-value">{{ scan.id }}</span>
+                </div>
+
+                <div class="scan-info-item">
+                    <span class="info-label">Date and Time</span>
+                    <span class="info-value">{{ scan.scan_time }}</span>
+                </div>
+
+                <div class="scan-info-item">
+                    <span class="info-label">Network Range</span>
+                    <span class="info-value">{{ scan.network_range }}</span>
+                </div>
+
+                <div class="scan-info-item">
+                    <span class="info-label">Total Devices</span>
+                    <span class="info-value">{{ scan.total_devices }}</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Discovered Devices -->
+        <section class="section">
+
+            <div class="section-heading">
+                <h2>Discovered Devices</h2>
+                <p>Devices identified during this network scan</p>
+            </div>
+
+            {% if devices %}
+
+            <div class="table-wrapper">
+
+                <table class="details-table">
+
+                    <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>MAC Address</th>
+                            <th>Manufacturer</th>
+                            <th>Hostname</th>
+                            <th>Device Type</th>
+                            <th>Open Ports</th>
+                            <th>Risk Score</th>
+                            <th>Risk Level</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for device in devices %}
+
+                        <tr>
+
+                            <td>{{ device.ip_address }}</td>
+
+                            <td>{{ device.mac_address }}</td>
+
+                            <td>{{ device.manufacturer or "Unknown" }}</td>
+
+                            <td>{{ device.hostname or "Unknown" }}</td>
+
+                            <td>{{ device.device_type }}</td>
+
+                            <td>
+                                {{ device.open_ports if device.open_ports else "None" }}
+                            </td>
+
+                            <td>{{ device.risk_score or 0 }}</td>
+
+                            <td>
+                                <span class="risk-badge risk-{{ (device.risk_level or 'low')|lower }}">
+                                    {{ device.risk_level or "Low" }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <a href="{{ url_for('device_details', device_id=device.id) }}"
+                                    class="view-details-button">
+                                    View Device
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+                <h3>No Devices Found</h3>
+                <p>No devices were discovered during this network scan.</p>
+            </div>
+
+            {% endif %}
+
+            <p class="table-note">
+                Historical assessments reflect the network observations
+                made at the time of each scan.
+            </p>
+
+        </section>
+
+    </div>
+
+</body>
+
+</html>
