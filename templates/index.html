@@ -26,16 +26,12 @@
             <form method="POST" id="scanForm">
 
                 <button type="submit" class="scan-button main-scan-button" id="scanButton">
-
                     <span id="scanButtonText">Scan Network</span>
-
                 </button>
 
                 <div class="scan-status" id="scanStatus" role="status" aria-live="polite">
-
                     <span class="scan-spinner"></span>
                     Scanning your network. Please wait...
-
                 </div>
 
             </form>
@@ -44,13 +40,11 @@
 
         <!-- Scan Error -->
         {% if scan_error %}
-
         <section class="section">
             <p class="error">
                 Scan Error: {{ scan_error }}
             </p>
         </section>
-
         {% endif %}
 
         <!-- Display Results After Scanning -->
@@ -131,7 +125,7 @@
 
         {% endif %}
 
-        <!-- 3. Summary and Scan Results -->
+        <!-- 3. Summary -->
         {% if not scan_error %}
 
         <section class="summary-grid">
@@ -176,6 +170,7 @@
                             <th>Manufacturer</th>
                             <th>Hostname</th>
                             <th>Device Type</th>
+                            <th>Camera Detection</th>
                             <th>Open Ports</th>
                             <th>Risk Score</th>
                             <th>Risk Level</th>
@@ -192,6 +187,19 @@
                             <td>{{ device.vendor }}</td>
                             <td>{{ device.hostname }}</td>
                             <td>{{ device.device_type }}</td>
+
+                            <td>
+                                {% if device.device_type in [
+                                "Possible Camera Device",
+                                "Possible Camera / NVR Device"
+                                ] %}
+                                <span class="risk risk-medium">
+                                    Possible Camera
+                                </span>
+                                {% else %}
+                                Not identified
+                                {% endif %}
+                            </td>
 
                             <td>
                                 {{ device.open_ports | join(', ')
@@ -222,8 +230,9 @@
             {% endif %}
 
             <p class="notice">
-                Device classifications and risk levels are preliminary
-                assessments based on observed network evidence.
+                Device classifications, camera indicators and risk levels
+                are preliminary assessments based on observed network evidence.
+                Camera detection does not confirm that a device is a camera.
             </p>
 
         </section>

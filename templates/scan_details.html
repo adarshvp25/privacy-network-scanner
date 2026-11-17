@@ -20,7 +20,6 @@
             <p>Detailed network scan results and discovered devices</p>
         </header>
 
-
         <!-- Scan Information -->
         <section class="section">
 
@@ -64,7 +63,6 @@
 
         </section>
 
-
         <!-- Discovered Devices -->
         <section class="section">
 
@@ -86,6 +84,7 @@
                             <th>Manufacturer</th>
                             <th>Hostname</th>
                             <th>Device Type</th>
+                            <th>Camera Detection</th>
                             <th>Open Ports</th>
                             <th>Risk Score</th>
                             <th>Risk Level</th>
@@ -108,6 +107,19 @@
                             <td>{{ device.hostname or "Unknown" }}</td>
 
                             <td>{{ device.device_type }}</td>
+
+                            <td>
+                                {% if device.device_type in [
+                                "Possible Camera Device",
+                                "Possible Camera / NVR Device"
+                                ] %}
+                                <span class="risk risk-medium">
+                                    Possible Camera
+                                </span>
+                                {% else %}
+                                Not identified
+                                {% endif %}
+                            </td>
 
                             <td>
                                 {{ device.open_ports if device.open_ports else "None" }}
@@ -148,8 +160,10 @@
             {% endif %}
 
             <p class="table-note">
-                Historical assessments reflect the network observations
-                made at the time of each scan.
+                Historical device classifications and security assessments
+                reflect network observations made at the time of each scan.
+                Camera detection is indicative and does not confirm the
+                presence or absence of a camera.
             </p>
 
         </section>

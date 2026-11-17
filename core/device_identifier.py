@@ -21,6 +21,32 @@ COMMON_PORTS = {
 }
 
 
+CAMERA_KEYWORDS = [
+    "camera",
+    "ipcam",
+    "webcam",
+    "nvr",
+    "dvr"
+]
+
+
+CAMERA_MANUFACTURERS = [
+    "hikvision",
+    "dahua",
+    "axis communications",
+    "reolink",
+    "amcrest",
+    "lorex",
+    "avigilon",
+    "hanwha",
+    "vivotek",
+    "foscam",
+    "ezviz",
+    "imou",
+    "uniview"
+]
+
+
 @lru_cache(maxsize=256)
 def get_mac_vendor(mac_address):
     """Retrieve and cache manufacturer information."""
@@ -97,18 +123,66 @@ def identify_device(mac_address, ip_address, gateway):
     confidence = "Low"
     indicators = []
 
+    # 1. Identify the router or gateway.
     if ip_address == gateway:
 
         device_type = "Router / Gateway"
         confidence = "High"
         indicators.append("Matches the detected default gateway")
 
+    # 2. Identify possible camera or surveillance devices.
+    elif (
+        any(keyword in hostname_lower for keyword in CAMERA_KEYWORDS)
+        or any(
+            manufacturer in vendor_lower
+            for manufacturer in CAMERA_MANUFACTURERS
+        )
+        or 554 in open_ports
+        or 8554 in open_ports
+    ):
+
+        device_type = "Possible Camera Device"
+
+        if (
+            any(keyword in hostname_lower for keyword in CAMERA_KEYWORDS)
+            or any(
+                manufacturer in vendor_lower
+                for manufacturer in CAMERA_MANUFACTURERS
+            )
+        ):
+            confidence = "Medium"
+
+            indicators.append(
+                "Hostname or manufacturer suggests a camera or surveillance device"
+            )
+
+        else:
+            confidence = "Low"
+
+            indicators.append(
+                "RTSP media-streaming service detected"
+            )
+
+        if 554 in open_ports:
+            indicators.append("RTSP service detected on port 554")
+
+        if 8554 in open_ports:
+            indicators.append("Alternative RTSP service detected on port 8554")
+
+        if any(
+            keyword in hostname_lower
+            for keyword in ["nvr", "dvr"]
+        ):
+            device_type = "Possible Camera / NVR Device"
+
+    # 3. Identify possible Apple devices.
     elif "apple" in vendor_lower:
 
         device_type = "Possible Apple Device"
         confidence = "Medium"
         indicators.append("MAC manufacturer identifies Apple")
 
+    # 4. Identify possible Android devices.
     elif any(name in vendor_lower for name in [
         "samsung", "xiaomi", "oppo", "vivo",
         "oneplus", "motorola", "realme", "google"
@@ -120,6 +194,7 @@ def identify_device(mac_address, ip_address, gateway):
             "Manufacturer is associated with Android devices"
         )
 
+    # 5. Identify possible Windows devices.
     elif (
         any(name in hostname_lower for name in [
             "desktop-", "laptop-", "win-"
@@ -134,6 +209,7 @@ def identify_device(mac_address, ip_address, gateway):
             "Hostname or network services suggest Windows"
         )
 
+    # 6. Identify possible Linux or server devices.
     elif 22 in open_ports:
 
         device_type = "Possible Linux / Server Device"
